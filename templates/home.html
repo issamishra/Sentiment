@@ -1,0 +1,146 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Josefin+Slab"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script
+      src="https://kit.fontawesome.com/yourcode.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="{% static 'home.css' %}" />
+    <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <section class="main-body">
+      <div id="myChart"></div>
+      <div class="main-input">
+        <script src="https://cdn.lordicon.com/xdjxvujz.js"></script>
+        <lord-icon
+          src="https://cdn.lordicon.com/fcoczpqi.json"
+          trigger="loop"
+          style="width: 250px; height: 250px"
+        >
+        </lord-icon>
+        <form action="{% url 'index' %}" method="post">
+          <h2># text</h2>
+          {% csrf_token %}
+          <input
+            class="text"
+            type="text"
+            name="query"
+            placeholder="Enter your text here"
+            id=""
+          />
+          <input class="btn" type="submit" value="Analyse" />
+          <h3>Sentiment : <span>{{polarity}}</span></h3>
+          <h3>Fact or Opinion : <span>{{subjectivity}}</span></h3>
+        </form>
+
+        <form action="{% url 'tweets' %}" method="post">
+          <h2># tweet</h2>
+          {% csrf_token %}
+          <input
+            class="text"
+            type="text"
+            name="query"
+            placeholder="Search Recent Tweets"
+            id=""
+          />
+          <input class="btn" type="submit" value="Go for it" />
+        </form>
+      </div>
+
+      <script>
+        var myConfig8 = {
+            "type": "gauge",
+            "backgroundColor": "None",
+            "scale-r": {
+              "aperture": 180,
+              "values": "0:100:20",
+              "center": {
+                "size": 1,
+                "background-color": "#66CCFF #FFCCFF",
+                "border-color": "none"
+              },
+              "ring": {
+                "size": 10,
+                "rules": [{
+                    "rule": "%v >= 0 && %v <= 20",
+                    "background-color": "red"
+                  },
+                  {
+                    "rule": "%v >= 20 && %v <= 40",
+                    "background-color": "orange"
+                  },
+                  {
+                    "rule": "%v >= 40 && %v <= 60",
+                    "background-color": "yellow"
+                  },
+                  {
+                    "rule": "%v >= 60 && %v <= 80",
+                    "background-color": "green"
+                  },
+                  {
+                    "rule": "%v >= 80 && %v <=100",
+                    "background-color": "blue"
+                  }
+                ]
+              },
+              "labels": ["🤮", "🤢", "😐", "😊", "🤩", "😍"], //Scale Labels
+              "item": { //Scale Label Styling
+                "font-color": "purple",
+                "font-family": "Georgia, serif",
+                "font-size": 24,
+                "font-weight": "bold", //or "normal"
+                "font-style": "normal", //or "italic"
+                "offset-r": 0,
+                "angle": "auto"
+              },
+              "guide": { //Specify your gauge chart's background color(s).
+                'background-color': "#000000",
+                "alpha":0.2
+              },
+            },
+            "plot": {
+              "csize": "10%",
+              "size": "100%",
+              "background-color": "white",
+              "animation": { //Animation object
+                            "effect":2,
+                            "method":3,
+                            "sequence":1,
+                            "speed":5000
+                          }
+
+            },
+            "series": [{
+              "csize":"15%",
+              "values": [{{polarity}}*100],
+            },],
+
+            "scale": {
+              "size-factor": "70%" //Modify your gauge chart size.
+            },
+
+          };
+          zingchart.render({
+            id: 'myChart',
+            data: myConfig8,
+
+          });
+      </script>
+    </section>
+    <section class="descr">
+      <h1>Sentiment Analysis</h1>
+      <p>Analysis Sentiment of your normal text and tweet #hastags</p>
+    </section>
+  </body>
+</html>
